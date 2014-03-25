@@ -8,4 +8,7 @@ The default css has not been set to advocomp. You must create a new user and cha
 Most important configs are in wikiconfig.py. 
 Change the site name by finding sitename on line 38. It currently says ```sitename = u'Advo MoinMoin Desktop Edition'``` but you can change it! There are more configs that you can change. Just look at http://moinmo.in/HelpOnConfiguration for more information.
 
+Here's more info about editing stylesheets:
+http://sdl.beuc.net/sdl.wiki/HelpOnConfiguration_CascadingStyleSheets
 
+The latest commit (3/24/14 at 23:45) has the default theme set to advo. Most of my css changes are in custom.css but I think the other stylesheets (common.css, screen.css, print.css, etc) are somehow overriding my changes)
