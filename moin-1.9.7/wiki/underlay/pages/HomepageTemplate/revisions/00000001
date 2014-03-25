@@ -1,0 +1,15 @@
+##master-page:HomepageTemplate
+##master-date:Unknown-Date
+## Please edit system and help pages ONLY in the master wiki!
+## For more information, please see MoinMoin:MoinDev/Translation.
+#format wiki
+#language en
+= @ME@ =
+
+Email: <<MailTo(you AT SPAMFREE example DOT com)>>
+## You can even more obfuscate your email address by adding more uppercase letters followed by a leading and trailing blank.
+
+...
+
+----
+CategoryHomepage

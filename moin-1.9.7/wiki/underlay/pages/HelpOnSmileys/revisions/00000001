@@ -1,0 +1,81 @@
+## Please edit system and help pages ONLY in the master wiki!
+## For more information, please see MoinMoin:MoinDev/Translation.
+##master-page:Unknown-Page
+##master-date:Unknown-Date
+#acl -All:write Default
+#format wiki
+#language en
+= Graphical Smileys =
+To insert a smiley, just type in your favourite from the table below. They're only converted to an icon though if they are ''surrounded by whitespace''.
+
+<<ShowSmileys>>
+
+Also, you can add any image of your theme img folder by the Icon [[HelpOnMacros|macro]].
+
+||<rowbgcolor="#ffffcc"> '''Example'''  || '''Result'''                   ||
+|| `<<Icon(admon-caution.png)>>`        || <<Icon(admon-caution.png)>>    ||
+|| `<<Icon(admon-important.png)>>`      || <<Icon(admon-important.png)>>  ||
+|| `<<Icon(admon-note.png)>>`           || <<Icon(admon-note.png)>>       ||
+|| `<<Icon(admon-tip.png)>>`            || <<Icon(admon-tip.png)>>        ||
+|| `<<Icon(admon-warning.png)>>`        || <<Icon(admon-warning.png)>>    ||
+|| `<<Icon(alert.png)>>`                || <<Icon(alert.png)>>            ||
+|| `<<Icon(angry.png)>>`                || <<Icon(angry.png)>>            ||
+|| `<<Icon(attach.png)>>`               || <<Icon(attach.png)>>           ||
+|| `<<Icon(attention.png)>>`            || <<Icon(attention.png)>>        ||
+|| `<<Icon(biggrin.png)>>`              || <<Icon(biggrin.png)>>          ||
+|| `<<Icon(checkmark.png)>>`            || <<Icon(checkmark.png)>>        ||
+|| `<<Icon(devil.png)>>`                || <<Icon(devil.png)>>            ||
+|| `<<Icon(draft.png)>>`                || <<Icon(draft.png)>>            ||
+|| `<<Icon(frown.png)>>`                || <<Icon(frown.png)>>            ||
+|| `<<Icon(icon-error.png)>>`           || <<Icon(icon-error.png)>>       ||
+|| `<<Icon(icon-info.png)>>`            || <<Icon(icon-info.png)>>        ||
+|| `<<Icon(idea.png)>>`                 || <<Icon(idea.png)>>             ||
+|| `<<Icon(moin-attach.png)>>`          || <<Icon(moin-attach.png)>>      ||
+|| `<<Icon(moin-bottom.png)>>`          || <<Icon(moin-bottom.png)>>      ||
+|| `<<Icon(moin-conflict.png)>>`        || <<Icon(moin-conflict.png)>>    ||
+|| `<<Icon(moin-deleted.png)>>`         || <<Icon(moin-deleted.png)>>     ||
+|| `<<Icon(moin-diff.png)>>`            || <<Icon(moin-diff.png)>>        ||
+|| `<<Icon(moin-edit.png)>>`            || <<Icon(moin-edit.png)>>        ||
+|| `<<Icon(moin-email.png)>>`           || <<Icon(moin-email.png)>>       ||
+|| `<<Icon(moin-ftp.png)>>`             || <<Icon(moin-ftp.png)>>         ||
+|| `<<Icon(moin-help.png)>>`            || <<Icon(moin-help.png)>>        ||
+|| `<<Icon(moin-home.png)>>`            || <<Icon(moin-home.png)>>        ||
+|| `<<Icon(moin-icon.png)>>`            || <<Icon(moin-icon.png)>>        ||
+|| `<<Icon(moin-info.png)>>`            || <<Icon(moin-info.png)>>        ||
+|| `<<Icon(moin-inter.png)>>`           || <<Icon(moin-inter.png)>>       ||
+|| `<<Icon(moin-new.png)>>`             || <<Icon(moin-new.png)>>         ||
+|| `<<Icon(moin-news.png)>>`            || <<Icon(moin-news.png)>>        ||
+|| `<<Icon(moin-parent.png)>>`          || <<Icon(moin-parent.png)>>      ||
+|| `<<Icon(moin-print.png)>>`           || <<Icon(moin-print.png)>>       ||
+|| `<<Icon(moin-raw.png)>>`             || <<Icon(moin-raw.png)>>         ||
+|| `<<Icon(moin-renamed.png)>>`         || <<Icon(moin-renamed.png)>>     ||
+|| `<<Icon(moin-rss.png)>>`             || <<Icon(moin-rss.png)>>         ||
+|| `<<Icon(moin-search.png)>>`          || <<Icon(moin-search.png)>>      ||
+|| `<<Icon(moin-show.png)>>`            || <<Icon(moin-show.png)>>        ||
+|| `<<Icon(moin-subscribe.png)>>`       || <<Icon(moin-subscribe.png)>>   ||
+|| `<<Icon(moin-telnet.png)>>`          || <<Icon(moin-telnet.png)>>      ||
+|| `<<Icon(moin-top.png)>>`             || <<Icon(moin-top.png)>>         ||
+|| `<<Icon(moin-unsubscribe.png)>>`     || <<Icon(moin-unsubscribe.png)>> ||
+|| `<<Icon(moin-updated.png)>>`         || <<Icon(moin-updated.png)>>     ||
+|| `<<Icon(moin-up.png)>>`              || <<Icon(moin-up.png)>>          ||
+|| `<<Icon(moin-www.png)>>`             || <<Icon(moin-www.png)>>         ||
+|| `<<Icon(moin-xml2.png)>>`            || <<Icon(moin-xml2.png)>>        ||
+|| `<<Icon(moin-xml.png)>>`             || <<Icon(moin-xml.png)>>         ||
+|| `<<Icon(ohwell.png)>>`               || <<Icon(ohwell.png)>>           ||
+|| `<<Icon(prio1.png)>>`                || <<Icon(prio1.png)>>            ||
+|| `<<Icon(prio2.png)>>`                || <<Icon(prio2.png)>>            ||
+|| `<<Icon(prio3.png)>>`                || <<Icon(prio3.png)>>            ||
+|| `<<Icon(PythonPowered.png)>>`        || <<Icon(PythonPowered.png)>>    ||
+|| `<<Icon(redface.png)>>`              || <<Icon(redface.png)>>          ||
+|| `<<Icon(sad.png)>>`                  || <<Icon(sad.png)>>              ||
+|| `<<Icon(smile2.png)>>`               || <<Icon(smile2.png)>>           ||
+|| `<<Icon(smile3.png)>>`               || <<Icon(smile3.png)>>           ||
+|| `<<Icon(smile4.png)>>`               || <<Icon(smile4.png)>>           ||
+|| `<<Icon(smile.png)>>`                || <<Icon(smile.png)>>            ||
+|| `<<Icon(star_off.png)>>`             || <<Icon(star_off.png)>>         ||
+|| `<<Icon(star_on.png)>>`              || <<Icon(star_on.png)>>          ||
+|| `<<Icon(thumbs-up.png)>>`            || <<Icon(thumbs-up.png)>>        ||
+|| `<<Icon(tired.png)>>`                || <<Icon(tired.png)>>            ||
+|| `<<Icon(tongue.png)>>`               || <<Icon(tongue.png)>>           ||
+
+For more information on the possible markup, see HelpOnEditing. 

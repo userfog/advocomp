@@ -1,0 +1,30 @@
+## Please edit system and help pages ONLY in the master wiki!
+## For more information, please see MoinMoin:MoinDev/Translation.
+##master-page:
+##master-date:
+#acl -All:write Default
+#format wiki
+#language en
+#pragma section-numbers off
+<<Navigation(slides)>>
+= Headlines =
+
+== Input ==
+{{{
+= First headline level with =-character =
+== Second ==
+=== Third ===
+... (up to "Fifth")
+}}}
+
+== Display ==
+{{{#!wiki
+= First headline level with =-character =
+== Second ==
+=== Third ===
+... (up to "Fifth")
+}}}
+
+(!) If a headline isn't displayed correctly, it is usually because:
+ * there are invisible (whitespace) spaces after the concluding =-character (they can be deleted manually or with "<<GetText(Remove trailing whitespace from each line)>>" edit option).
+ * the number of =-characters at the front and at the back doesn't match.

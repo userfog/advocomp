@@ -35,11 +35,13 @@ class LocalConfig(multiconfig.DefaultConfig):
     DesktopEdition = True # give all local users full powers
     acl_rights_default = u"All:read,write,delete,revert,admin"
     surge_action_limits = None # no surge protection
-    sitename = u'MoinMoin DesktopEdition'
-    logo_string = u'<img src="%s/common/moinmoin.png" alt="MoinMoin Logo">' % url_prefix_static
+    sitename = u'Advo MoinMoin DesktopEdition'
+    logo_string = u'<img src="http://www.theharvardadvocate.com/themes/advocate/logo.png" alt="Advocate Logo">'
+    #logo_string = u'<img src="%s/common/moinmoin.png" alt="MoinMoin Logo">' % url_prefix_static
+    css_url = u'%s/advocomp/css/custom.css' % url_prefix_static
     # ^^^ DON'T TOUCH THIS EXCEPT IF YOU KNOW WHAT YOU DO ^^^
 
-    #page_front_page = u'FrontPage' # change to some better value
+    page_front_page = u'FrontPage' # change to some better value
 
     # Add your configuration items here.
     secrets = 'This string is NOT a secret, please make up your own, long, random secret string!'

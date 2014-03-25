@@ -1,0 +1,55 @@
+## Please edit system and help pages ONLY in the master wiki!
+## For more information, please see MoinMoin:MoinDev/Translation.
+##master-page:Unknown-Page
+##master-date:Unknown-Date
+#acl -All:write Default
+#format wiki
+#language en
+= Robots =
+
+Robots (known also as crawlers and spiders) are programs which navigate Internet sites and download the content without explicit supervision, typically for the purpose of building a database to be used by search engines, although they may also be engaged in other forms of data-mining. Although such programs may perform a useful purpose, they can also cause a high load on sites they visit by requesting large numbers of pages and other resources; they can also expose content from a site that is of little general interest, drowning out the interesting content in the eventual search engine results produced for the site.
+
+(!) Note that !MoinMoin's own search functionality does not depend on having robots access the pages of a wiki. See HelpOnXapian for details of the search engine indexing that can be done internally within !MoinMoin.
+
+!MoinMoin controls robots through the following mechanisms:
+
+||<rowbgcolor="#ffffcc"> '''Name''' || '''Description''' ||
+|| ua_spiders || This [[HelpOnConfiguration#spam_leech_dos|configuration setting]] controls access to actions, preventing such programs from visiting things like past page revisions (through the "info" action) or from attempting to change the content on a !MoinMoin site in some way. ||
+|| html_head_index ||<|4> These [[HelpOnConfiguration#various|configuration settings]] control the <HEAD> tags that appear in HTML output. Since some robots process <META> tags and observe instructions related to link-following, these settings may be changed to influence how robots navigate a site. ||
+|| html_head_normal ||
+|| html_head_posts ||
+|| html_head_queries ||
+|| robots.txt || !MoinMoin deploys a collection of static resources inside a directory called `htdocs`, including a file called `robots.txt`. By editing this file, robots can be persuaded to access (or not access) a site. ||
+
+== Making a site more publicly searchable ==
+
+By default, !MoinMoin tends to forbid robots, deny access by robots to actions, and instruct robots not to follow links if they should end up accessing pages on a wiki. Although a wiki configured in this fashion may still appear in search engine results, mostly because other sites may have linked to pages on such a wiki, many pages will be unknown to such search engines.
+
+To permit indexing by robots...
+
+ 1. Change the `robots.txt` file to resemble the following:
+ {{{
+User-agent: *
+Allow: /
+Crawl-delay: 20
+ }}}
+ This allows any robot (`User-agent`), but asks that they only access the site every 20 seconds or less frequently. You can specify a more specific pattern to only permit certain robots, and add multiple sections describing the allowed access rules for different robots. Make sure that the URL path given for `Allow` matches the root of the wiki or the part of the wiki that should be indexed.
+ 1. In your [[HelpOnConfiguration|configuration]] change or add the `html_head_normal` setting so that it resembles the following:
+ {{{#!python numbers=disable
+html_head_normal = '<meta name="robots" content="index,follow">\n'
+ }}}
+ This lets robots know that they should index normal pages and follow the links to find other pages. These settings can be changed to `noindex` and `nofollow` to instruct robots to do the opposite.
+
+Note that robots are free to ignore the instructions given, although doing so is seen as bad practice, and so the more well-known search engine services tend to observe the instructions rather than risk damaging their reputation by ignoring them.
+
+== Making actions accessible by certain clients ==
+
+Some users wish to use programs other than their normal web browser to access wiki content. For example, a calendar client may need to invoke an action in order to download content in a format it can understand, and it may appear as the `curl` program when accessing a site; or it may be convenient for some users to use tools like `wget` to access files stored as attachments.
+
+To allow certain clients to perform actions, change the `ua_spiders` setting in your [[HelpOnConfiguration|configuration]]. One way of doing this is to redefine the setting as follows:
+
+{{{#!python numbers=disable
+ua_spiders = multiconfig.DefaultConfig.ua_spiders.replace("|wget", "").replace("|curl", "")
+}}}
+
+The above assumes that the configuration class is `multiconfig.DefaultConfig` - you will need to consult which class is used in your own configuration - and proceeds to edit the setting to remove `wget` and `curl` from a regular expression describing robots or clients that are blocked from invoking actions.

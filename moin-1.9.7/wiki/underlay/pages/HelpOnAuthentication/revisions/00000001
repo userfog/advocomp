@@ -1,0 +1,245 @@
+## Please edit system and help pages ONLY in the master wiki!
+## For more information, please see MoinMoin:MoinDev/Translation.
+##master-page:Unknown-Page
+##master-date:Unknown-Date
+#acl -All:write Default
+#format wiki
+#language en
+= How Authentication works with MoinMoin =
+<<TableOfContents>>
+
+!MoinMoin supports configurable, modular authenticators to support all sorts of builtin and 3rd party authentication methods.
+
+You use the `auth` configuration value to set up a list of authenticators that are processed in exactly that order.
+
+When an external user database is used, you do not want to recreate all users in moin manually. For this case the authenticator objects which support user profile creation/updating have a parameter `autocreate`. If you set it to True a new user profile will be created/updated automatically when a (new) user has passed authentication.
+
+Presently the following authenticators are supported:
+
+||<rowbgcolor="#ffffcc"> '''Server setup''' || '''Authentication''' || '''Authenticator class in moin''' ||
+||<|8 (> All || by moin via username/password || `MoinMoin.auth.MoinAuth` ||
+|| by PHP session || `MoinMoin.auth.php_session.PHPSessionAuth` ||
+|| by moin via external cookie || see `contrib/auth_externalcookie/` and HelpOnAuthentication/ExternalCookie||
+|| by [[http://openid.net/|OpenID]] || `MoinMoin.auth.openidrp.OpenIDAuth` ||
+|| OpenID verification by http://botbouncer.com/ || `MoinMoin.auth.botbouncer.BotBouncer` ||
+|| by moin via LDAP || `MoinMoin.auth.ldap_login.LDAPAuth` ||
+|| by moin via a remote moin wiki || `MoinMoin.auth.interwiki` - still experimental ||
+|| by moin configuration, fixed username || `MoinMoin.auth.GivenAuth` ||
+|| any Web Server setting REMOTE_USER || e.g. for HTTP Basic, HTTP Digest, SSPI (aka NTLM) or LDAP auth || `MoinMoin.auth.GivenAuth` ||
+|| Apache+SSL || by Apache via SSL client certificate || `MoinMoin.auth.sslclientcert.SSLClientCertAuth` ||
+
+Other pseudo-authenticators - These are not strictly authenticators, as they don't authenticate users, but use auth information for other purposes:
+
+ || `MoinMoin.auth.log.AuthLog` || will just log login/logout/request, nothing else ||
+ || `MoinMoin.auth.smb_mount.SMBMount` || mount some smb share using user/password from login, umount on logout ||
+
+
+== Shipped plugins ==
+=== MoinAuth (default) ===
+This is the default auth list moin uses (so if you just want that, you don't need to configure it).
+
+{{{#!python
+    from MoinMoin.auth import MoinAuth
+    auth = [MoinAuth()]
+}}}
+
+=== Given authentication ===
+==== given by REMOTE_USER environment variable ====
+Webservers (like e.g. Apache) often support all sorts of authentication plugins (e.g. HTTP basic auth). If the webserver is configured for authentication, it handles authentication before moin gets called. When visiting a resource requiring authentication, you get queried for username/password by a dialog box of your browser. When you submit, 2 things can happen:
+
+ * username/password is incorrect, usually it will just ask again (if you cancel, it will deny access with a [[http://en.wikipedia.org/wiki/List_of_HTTP_status_codes| 401 not authorized]] error)
+ * username/password is correct, the webserver passes the authorized username to Moin (via REMOTE_USER).
+
+Moin's !GivenAuth authenticator will, by default, just try to log in the user with the username it recieved from REMOTE_USER.
+
+To activate usage of REMOTE_USER for authentication you have to add following lines to `wikiconfig.py`:
+{{{#!python
+    from MoinMoin.auth import GivenAuth
+    auth = [GivenAuth(autocreate=True)]
+}}}
+
+==== given by other environment variable ====
+Instead of reading the username from REMOTE_USER, moin can also read it from some other environment variable:
+{{{#!python
+    from MoinMoin.auth import GivenAuth
+    auth = [GivenAuth(env_var='WHATEVER', autocreate=True)]
+}}}
+
+==== decoding of the user name ====
+REMOTE_USER (or whatever you specify as env_var) is a encoded string and needs to be decoded to unicode. If you don't specify the coding, moin will try 'utf-8' and 'latin-1' (in that order). For non-ASCII characters, this might lead to incorrect results if another coding was used by the web server.
+
+If it fails, you can specify the coding manually:
+{{{#!python
+    auth = [GivenAuth(env_var='WHATEVER', autocreate=True, coding='cp850')]
+}}}
+
+==== transformation of the user name ====
+Sometimes the user name we receive in REMOTE_USER needs some transformation, so it can sanely be used in the wiki.
+
+!GivenAuth has some flags to support some standard transformations, enable whatever you like (give True - the default is all False, meaning disabled transformation):
+
+||<rowbgcolor="#ffffcc"> '''Flag'''       || '''Input'''       || '''Output''' ||
+|| strip_maildomain || `joe@example.org` || `joe`        ||
+|| strip_windomain  || `DOMAIN\joe`      || `joe`        ||
+|| titlecase        || `joe doe`         || `Joe Doe`    ||
+|| remove_blanks    || `Joe Doe`         || `JoeDoe`     ||
+
+(!) The transformations (if enabled) will happen in the order shown.
+
+For example, for some windows domain environments, this might make sense:
+{{{#!python
+    auth = [GivenAuth(autocreate=True, strip_windomain=True, titlecase=True, remove_blanks=True)]
+}}}
+
+==== fixed user given by configuration ====
+You can also hardcode a username into your configuration:
+{{{#!python
+    from MoinMoin.auth import GivenAuth
+    auth = [GivenAuth(user_name=u'Joe Doe', autocreate=True)]
+}}}
+
+Everyone and everything accessing the wiki will now be logged in as user Joe Doe automatically.
+
+
+=== SSL client certification authentication ===
+To activate authentication via SSL client certificates you have to add following lines to `wikiconfig.py`:
+{{{#!python
+    from MoinMoin.auth.sslclientcert import SSLClientCertAuth
+    auth = [SSLClientCertAuth()]
+}}}
+
+SSL client certification authentication must be used with a web server like Apache that handles the SSL bits and just presents a few environment variables to Moin.
+
+The SSLClientCertAuth authenticator has a few parameters that you pass to the constructor (example below):
+||<rowbgcolor="#ffffcc"> '''Parameter''' || '''Default''' || '''Meaning''' ||
+|| `authorities` || None || a list of authorities that are accepted, or None to accept all ||
+|| `email_key` || True || indicates whether the email in the certificate should be used to find the Moin user ||
+|| `name_key` || True || indiciates whether the name in the certificate should be used to find the Moin user ||
+|| `use_email` || False || if set to True, the account email cannot be changed and is forced to the one given in the certificate ||
+|| `use_name` || False || if set to True, the account name cannot be changed and is forced to the one given in the certificate ||
+|| `autocreate` || False || if set to True, automatically create moin user profiles ||
+
+For example, to accept only certificates that Apache has verified and that are signed by a certain authority, use:
+{{{#!python
+    from MoinMoin.auth.sslclientcert import SSLClientCertAuth
+    auth = [SSLClientCertAuth(authorities=['my.authority.tld'])]
+}}} or similar.
+
+=== PHP session ===
+To activate Single-Sign-On integration with PHP applications, use this module. It reads PHP session files and therefore directly integrates with existing PHP authentication systems.
+
+To use this module, use the following lines of code in your configuration:
+{{{#!python
+    from MoinMoin.auth.php_session import PHPSessionAuth
+    auth = [PHPSessionAuth()]
+}}}
+
+PHPSessionAuth has the following parameters: {{{#!python
+    PHPSessionAuth(apps=['egw'], s_path="/tmp", s_prefix="sess_")
+}}}
+ * `apps` is a list of enabled applications
+ * `s_path` is the path of the PHP session files
+ * `s_prefix` is the prefix of the PHP session files
+
+The only supported PHP application is eGroupware 1.2 currently. But it should be fairly easy to add a few lines of code that extract the necessary information from the PHP session, if you do that, please open a feature request with a patch.
+
+=== OpenID (with BotBouncer) ===
+The OpenID authentication plugin allows users to sign in using their OpenID and connect that OpenID to a new or existing Moin account. To allow users to sign in with OpenID, add the plugin to the auth list, or to require OpenID with http://botbouncer.com/ verification use:
+{{{#!python
+    from MoinMoin.auth.openidrp import OpenIDAuth
+    from MoinMoin.auth.botbouncer import BotBouncer
+    auth = [OpenIDAuth(), BotBouncer("your-botbouncer-API-key")]
+}}}
+
+OpenID authentication requires anonymous sessions, set the first part of the `cookie_lifetime` tuple to anything bigger than zero (like `cookie_lifetime = (2,12)`). See HelpOnConfiguration for more details on the value. For OpenID, very little time should be sufficient.
+
+==== Advanced OpenID RP configuration ====
+
+The OpenID RP code can also be configured for two use cases:
+ 1. You can force a specific provider to be used, there are two ways to achieve this:
+  * Simply configure the `OpenIDAuth` authenticator like this: {{{
+auth = [OpenIDAuth(forced_service='http://myopenid.com/'), ]
+}}}
+  * Create an `OpenIDServiceEndpoint` object and use that for the `forced_service` parameter: {{{
+fs = OpenIDServiceEndpoint()
+fs.type_uris = OPENID_2_0_TYPE
+fs.server_url = 'http://localhost:8000/openidserver'
+fs.claimed_id = 'http://specs.openid.net/auth/2.0/identifier_select'
+
+auth = [OpenIDAuth(forced_service=fs), ]
+}}}
+ In the latter case, no discovery needs to be done.
+
+ 2. You can specify functions to be called in various steps of the OpenID authentication process to, for example, implement Attribute Exchange. For now, this is not documented here, you'll have to look at the file `MoinMoin/auth/openidrp.py`.
+
+=== LDAP based user authentication ===
+
+The LDAP authenticator of Moin enables single-sign-on (SSO) - assuming you already have a LDAP directory with your users, passwords, email adresses. On Linux this could be some OpenLDAP server, on a Windows server (usually the domain controller) this is called "Active Directory" (short: AD).
+
+It works like this:
+ * User enters his name and password via moin's login action and clicks on the login button.
+ * On login, ldap_login.LDAPAuth checks username/password against LDAP.
+  * If username/password is ok for LDAP, it creates or updates a user profile with values from ldap (name, alias, email) and creates a user object in the !MoinMoin process, then it hands over to the next authenticator...
+  * If username/password is not ok for LDAP, it vetoes and aborts the login (no other authenticators checked).
+  * So, for example, if you are using `'uid=%(username)s,ou=people,dc=foo,dc=com',` as the `bind_dn` and, you are also using some other authenticators ( like the default [[HelpOnAuthentication#MoinAuth_.28default.29|MoinAuth]] ) , then the users added through the alternative authententicator won't be able to authenticate. If however you use a single bind DN as `bind_dn = 'cn=moinadmin,dc=foo,dc=com'`, then your alternative authentication methods will be queried as well, and users added through that authenticator will be able to login. 
+ * If the login was successful, moin establishes a session for that user.
+
+==== LDAP auth installation / configuration ====
+You need to install [[http://www.python-ldap.org|python-ldap]] module (and everything it depends on, see its documentation).
+
+You need an LDAP or AD server. :)
+
+See `wiki/config/more_samples/ldap_wikiconfig_snippet.py` in your moin dist archive for a snippet you can use in your wiki config.
+
+(!) Please also read the `README` file in that directory.
+
+==== LDAP auth Problems? ====
+!MoinMoin support does not know your LDAP server setup, so please follow these steps before asking for help:
+ * Configure DEBUG logging for `MoinMoin.auth.ldap_login` and look into the log output.
+ * Verify your settings and your user/password by using an ldap tool to query your LDAP server.
+  * /!\ If you're not successful in talking to your LDAP server with such a tool, you don't need to try with !MoinMoin.
+ * Ask the administrator of your LDAP/AD server for help / for correct settings.
+ * Maybe look into `MoinMoin/auth/ldap_login.py`, if you can debug or fix your problem there.
+
+/!\ Only ask !MoinMoin support if you successfully used ldapsearch (or some similar tool) and you double checked your wiki config and it does still not work with moin.
+
+=== XMLRPC auth ===
+
+{{{#!python
+import xmlrpclib
+
+name = "TestUser"
+password = "secret"
+wikiurl = "http://localhost:8080/"
+
+homewiki = xmlrpclib.ServerProxy(wikiurl + "?action=xmlrpc2", allow_none=True)
+auth_token = homewiki.getAuthToken(name, password)
+
+mc = xmlrpclib.MultiCall(homewiki)
+mc.applyAuthToken(auth_token)
+# you can add more xmlrpc method calls to the multicall here,
+# they will run authenticated as user <name>.
+result = mc()
+}}}
+
+== Combining multiple authenticators ==
+For combining e.g. SSL client certificate and username/password authentication, your `wikiconfig.py` might contain:
+{{{#!python
+    from MoinMoin.auth import MoinAuth
+    from MoinMoin.auth.sslclientcert import SSLClientCertAuth
+    auth = [SSLClientCertAuth(), MoinAuth()]
+}}}
+
+In that case, any client certificates that the user provides will be used to log him on, but if they do not provide one they still have the option of logging on with their username/password.
+
+== Writing your own authenticator ==
+See the commented config file fragment `contrib/auth_externalcookie/` and `MoinMoin/auth/*.py` in your moin distribution archive for examples of how to do authentication. Also, the docstring in `MoinMoin/auth/__init__.py` contains an explanation of what can be done and how it is achieved.
+
+Authenticators can
+ * use the regular login form as their user interface for entering name and password
+ * use the regular logout action for logging out
+ * prohibit logging out (like SSL client certificate authentication that checks for every request)
+ * search existing user profiles for a "matching" user (the match needs not be the name, it can also be the email address or something you put into aliasname)
+ * create a user object and let it remember what attributes were determined by authenticator (and thus should not be offered on user preferences)
+ * update values in user's profile from externally provided data
+ * autocreate user profiles

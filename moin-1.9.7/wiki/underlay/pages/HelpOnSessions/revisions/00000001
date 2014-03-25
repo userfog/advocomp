@@ -1,0 +1,86 @@
+## Please edit system and help pages ONLY in the master wiki!
+## For more information, please see MoinMoin:MoinDev/Translation.
+##master-page:Unknown-Page
+##master-date:Unknown-Date
+#acl -All:write Default
+#format wiki
+#language en
+= How sessions work in MoinMoin =
+<<TableOfContents>>
+Sessions in MoinMoin are implemented using a special session service that can be configured in `cfg.session_service`.
+
+Code using the session framework currently includes:
+ * the superuser "change user" functionality, see HelpOnSuperUser
+ * the visited pages trail
+
+== Session related configuration ==
+|| cookie_name     || `None`    || Part of the session cookie name. None means to create the name from some url parts, 'siteidmagic' means use cfg.siteid (name of config file),  anything else will be just used as is.||
+|| cookie_domain   || `None`    || Domain used in the session cookie. ||
+|| cookie_lifetime || `(0, 12)` || Cookie lifetime in hours, can be fractional. First tuple element is for anonymous sessions, second tuple element is for logged-in sessions. For anonymous sessions, t=0 means that they are disabled, t>0 means that many hours. For logged-in sessions, t>0 means that many hours, or forever if user checked 'remember_me', t<0 means -t hours and ignore user 'remember_me' setting - you usually don't want to use t=0, it disables logged-in sessions. ||
+
+=== Single wiki ===
+Likely the only interesting item is `cookie_lifetime`.
+
+=== Multiple separate wikis under same domain, all using wikiconfig (not farmconfig) ===
+The default `cookie_name = None` creates a different cookie name and separate sessions for each wiki.
+
+If you want separate sessions for your wikis, you can't use `cookie_name = 'siteidmagic'` because that
+always would set the name to MOIN_SESSION_wikiconfig. So either explicitly set a unique cookie_name for
+each wiki or use `cookie_name = None`.
+
+=== Wiki farm, host based farming ===
+E.g. wiki1.example.org and wiki2.example.org.
+
+If you like shared sessions, shared user profiles, use this in your farmconfig:
+{{{#!highlight python
+    cookie_domain = '.example.org' # cookie domain matches for all wikis
+    cookie_name = 'myfarm' # cookie name is same for all wikis
+    session_dir = '/same_session_dir' # use same storage for session files
+    user_dir = '/same_user_dir' # use same storage for user profiles
+}}}
+
+=== Wiki farm, path based farming ===
+E.g. example.org/wiki1 and example.org/wiki2.
+
+If you like shared sessions, shared user profiles, use this in your farmconfig:
+{{{#!highlight python
+    cookie_name = 'myfarm' # cookie name is same for all wikis
+    session_dir = '/same_session_dir' # use same storage for session files
+    user_dir = '/same_user_dir' # use same storage for user profiles
+}}}
+
+=== Wiki farm, port based farming ===
+E.g. example.org:8000 and example.org:8001.
+
+If you like shared sessions, shared user profiles, use this in your farmconfig:
+{{{#!highlight python
+    cookie_name = 'myfarm' # cookie name is same for all wikis
+    session_dir = '/same_session_dir' # use same storage for session files
+    user_dir = '/same_user_dir' # use same storage for user profiles
+}}}
+
+
+== Session example code ==
+
+As an extension programmer, in order to use session variables, you can use `request.session` like a dict, values stored there are automatically saved and restored if a session is available.
+
+Here's an example macro using the session code:
+{{{#!highlight python
+# -*- coding: iso-8859-1 -*-
+
+"""
+    Tests session state.
+"""
+
+Dependencies = ['time']
+
+def execute(macro, args):
+    if macro.request.session.is_new:
+        return macro.formatter.text('Not storing any state until you send a cookie.')
+    if 'test' in macro.request.session:
+        return macro.formatter.text("Loaded value %d" % macro.request.session['test'])
+    import random
+    value = random.randint(1, 100000)
+    macro.request.session['test'] = value
+    return macro.formatter.text("Set to value %d" % value)
+}}}
