@@ -1,4 +1,4 @@
-# Data saved '2014-03-24 21:53:09' for id '1395629297.49.16617'
+# Data saved '2014-03-25 18:37:17' for id '1395629297.49.16617'
 aliasname=
 bookmarks{}=
 css_url=
@@ -7,7 +7,7 @@ datetime_fmt=
 disabled=0
 edit_on_doubleclick=1
 edit_rows=20
-editor_default=text
+editor_default=gui
 editor_ui=freechoice
 email=yuqi.hou@gmail.com
 email_subscribed_events[]=PageChangedEvent	PageRenamedEvent	PageDeletedEvent	PageCopiedEvent	PageRevertedEvent	FileAttachedEvent
@@ -15,7 +15,7 @@ enc_password={PASSLIB}$6$rounds=60000$7JNdzns8nmIEKZfF$61bIVZjqQE3TmZyVSOEYgzJXO
 jabber_subscribed_events[]=
 jid=
 language=
-last_saved=1395712389.9
+last_saved=1395787037.12
 mailto_author=0
 name=YuqiHou
 quicklinks[]=

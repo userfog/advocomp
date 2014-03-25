@@ -14,10 +14,10 @@ body {
     border: 0;
 }
 
-a:link { text-decoration: none; }
-a:link:hover, a:link:active { text-decoration: underline; color: green; }
-a:visited { text-decoration: none; color: blue; }
-a:visited:hover { text-decoration: none; color: red; }
+a:link { color: #DC3522; text-decoration: none; }
+a:link:hover, a:link:active { text-decoration: underline; color: #A81B0B; }
+a:visited { text-decoration: none; color: #DC3522; }
+a:visited:hover { text-decoration: none; color: #DC3522; }
 
 a.download {
     font-size: 120%; 
@@ -79,10 +79,16 @@ textarea {
     text-decoration: none;
 }
 
+#login {
+    float: right;
+    margin-top: .5em;
+}
+
 #username {
+    float: right;
     display: inline;
-    margin: 5px 12px;
-    padding: 0;
+    margin: 0px 12px;
+    padding-top: .5em;
     text-align: right;
     font-size: 0.82em;
     white-space: nowrap;
@@ -138,6 +144,7 @@ textarea {
     margin: 5px 12px;
     padding: 0;
     font-size: 0.88em;
+    float: left;
 }
 
 *[dir="rtl"] #pagetrail {
@@ -252,7 +259,8 @@ textarea {
 }
 
 #navibar li.current, #navibar li.current:hover {
-    background: #81BBF2; /* url(../img/tab-selected.png) repeat-x; */
+    /* background: #81BBF2; url(../img/tab-selected.png) repeat-x; */
+    background: #DC3522;
 }
 
 #pageline {
@@ -264,7 +272,7 @@ textarea {
     height: 4px;
     line-height: 4px;
     border-bottom: 1px solid #9C9C9C;
-    background: #81BBF2;
+    background: #DC3522;
 }
 
 .editbar {
@@ -301,7 +309,7 @@ textarea {
     border-bottom: 1px solid #9C9C9C;
 }
 
-.editbar a, .editbar a:visited { color: #0044B3; }
+.editbar a, .editbar a:visited { color: #DC3522; }
 
 #message {
     clear: both;

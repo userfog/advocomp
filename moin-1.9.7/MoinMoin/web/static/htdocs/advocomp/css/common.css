@@ -5,10 +5,12 @@ Copyright (c) 2001, 2002, 2003 by Juergen Hermann
 
 /* content styles */
 
+@import url(http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,700,800,600,300);
+
 html {
     background-color: white;
     color: black;
-    font-family: Arial, Lucida Grande, sans-serif;
+    font-family: Open Sans, Arial, Lucida Grande, sans-serif;
     font-size: 1em;
 }
 
