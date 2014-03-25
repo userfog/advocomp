@@ -39,6 +39,7 @@ class LocalConfig(multiconfig.DefaultConfig):
     logo_string = u'<img src="http://www.theharvardadvocate.com/themes/advocate/logo.png" alt="Advocate Logo">'
     #logo_string = u'<img src="%s/common/moinmoin.png" alt="MoinMoin Logo">' % url_prefix_static
     css_url = u'%s/advocomp/css/custom.css' % url_prefix_static
+    theme_default = 'advocomp'
     # ^^^ DON'T TOUCH THIS EXCEPT IF YOU KNOW WHAT YOU DO ^^^
 
     page_front_page = u'FrontPage' # change to some better value

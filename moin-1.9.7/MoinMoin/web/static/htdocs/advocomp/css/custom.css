@@ -1,5 +1,23 @@
 @import url("/moin_static190/modern/css/common.css");
+@import url("/moin_static190/modern/css/msie.css");
+@import url("/moin_static190/modern/css/print.css");
+@import url("/moin_static190/modern/css/projection.css");
+@import url("/moin_static190/modern/css/screen.css");
 
 #header {
-	background: #D6D6D6;
+background: #D6D6D6;
+}
+
+#login {
+	float: right;
+	margin-top: .5em;
+}
+
+#navibar li.current, 
+#navibar li.current:hover{
+	background: #DC3522;
+}
+
+a:hover{
+	background: #DC3522;
 }
