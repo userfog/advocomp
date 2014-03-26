@@ -36,6 +36,8 @@ class LocalConfig(multiconfig.DefaultConfig):
     acl_rights_default = u"All:read,write,delete,revert,admin"
     surge_action_limits = None # no surge protection
     sitename = u'Advo MoinMoin DesktopEdition'
+    superuser = [u"YuqiHou", ]
+    
     logo_string = u'<img src="http://www.theharvardadvocate.com/themes/advocate/logo.png" alt="Advocate Logo">'
     #logo_string = u'<img src="%s/common/moinmoin.png" alt="MoinMoin Logo">' % url_prefix_static
     css_url = u'%s/advocomp/css/custom.css' % url_prefix_static
