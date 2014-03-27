@@ -41,6 +41,11 @@ class LocalConfig(DefaultConfig):
     hostname = 'localhost'
     # if you use port < 1024, you need to start as root
     port = 8080
+    DesktopEdition = False # give all local users full powers
+    acl_rights_default = u"All:read,write,delete,revert,admin"
+    surge_action_limits = None # no surge protection
+    sitename = u'Advo MoinMoins'
+    superuser = [u"admin", ]
 
     # either multi-thread or multi-process (not both):
     # threaded = True, processes = 1 is usually what you want
